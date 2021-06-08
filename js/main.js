@@ -38,42 +38,91 @@ const commentNames = [
   'Гарсон',
 ];
 
-function createComments(quantity = 3) {
-  const comments = [];
+const descriptionsForPhoto = [
+  'Лучшее фото',
+  'Стильно',
+  'Модно',
+  'Кринж',
+  'Сфоткано на тапок',
+];
 
-  for (let i = 0; i < quantity; i++) {
-    comments[i] = {
-      message: commentMessages[getRandomNumberOfRange(0, commentMessages.length - 1)],
-      name: commentNames[getRandomNumberOfRange(0, commentNames.length - 1)],
-      id: i + 1001,
-      avatar : `img/avatar-${getRandomNumberOfRange(1, 6)}`,
-    };
+function generateArrayOfPhotoComments(quantity) {
+  const commentsArray = new Array(quantity).fill({});
+
+  function createPhotoComment(currentIndex) {
+    const result = {};
+    result.message = commentMessages[getRandomNumberOfRange(0, commentMessages.length - 1)];
+    result.name = commentNames[getRandomNumberOfRange(0, commentNames.length - 1)];
+    const min = 11;
+    const max = min + quantity - 1;
+    let idFor = getRandomNumberOfRange(min, max);
+
+    if (currentIndex === 0) {
+      result.id = idFor;
+    }
+    if (currentIndex > 0) {
+
+      for (let j = 0; j < currentIndex; j++) {
+        if (commentsArray[j].id === idFor) {
+          idFor = getRandomNumberOfRange(min, max);
+          j = -1;
+        }
+
+        if (j === currentIndex - 1) {
+          result.id = idFor;
+        }
+      }
+    }
+
+    return result;
   }
 
-  return comments;
+  for (let i = 0; i < commentsArray.length; i++) {
+    commentsArray[i] = createPhotoComment(i);
+  }
+  return commentsArray;
 }
 
-function createPhotoDescription(currentIndex) {
-  const id = currentIndex;
-  const url =  currentIndex;
-  const description = 'Краткость - сестра таланта, поэтому комментарий такой небольшой. Фото - пушшшка!';
-  const likes = getRandomNumberOfRange(15, 200);
-  const comments = createComments(3);
+function generateArrayOfPhotoDescriptions(quantity) {
+  const descrArray = new Array(quantity).fill({});
+  const startID = 10001;
+  const endID = startID + quantity;
 
-  const photoDescription = {
-    id,
-    url,
-    description,
-    likes,
-    comments,
-  };
+  function generatePhotoDescriprion(currentIndex) {
+    const obj = {};
+    let objID = getRandomNumberOfRange(startID, endID);
+    let objUrl = `photos/${getRandomNumberOfRange(1, 25)}.jpg`;
+    obj.comments = generateArrayOfPhotoComments(2);
+    obj.likes = getRandomNumberOfRange(15, 200);
+    obj.description = descriptionsForPhoto[getRandomNumberOfRange(0, descriptionsForPhoto.length - 1)];
 
-  return photoDescription;
+    if (currentIndex === 0) {
+      obj.id = objID;
+      obj.url = objUrl;
+    }
+
+    if (currentIndex > 0) {
+      for (let j = 0; j < currentIndex; j++) {
+
+        if (descrArray[j].url === objUrl || descrArray[j].id === objID) {
+          objUrl = `photos/${getRandomNumberOfRange(1, 25)}.jpg`;
+          objID = getRandomNumberOfRange(startID, endID);
+          j = -1;
+        }
+
+        if (j === currentIndex - 1) {
+          obj.id = objID;
+          obj.url = objUrl;
+        }
+      }
+    }
+    return obj;
+  }
+
+  for (let i = 0; i < descrArray.length; i++) {
+    descrArray[i] = generatePhotoDescriprion(i);
+  }
+  return descrArray;
 }
 
-function createPhotosDescriptionArray(quantity) {
-  const descriptionArray = new Array(quantity).fill('').map((obj, index) => createPhotoDescription(index));
-  return descriptionArray;
-}
-
-createPhotosDescriptionArray(25);
+generateArrayOfPhotoDescriptions(25);
