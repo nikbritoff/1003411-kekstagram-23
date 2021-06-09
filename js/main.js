@@ -1,20 +1,10 @@
-function getRandomNumberOfRange(min, max) {
-  if (min < 0 || min >= max) {
-    throw new Error('This function accepts values greater than zero');
-  }
-
-  const result = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  return result;
-}
-
-function checkLength(string, maxLength) {
-  return string.length <= maxLength;
-}
-
-
-getRandomNumberOfRange();
-checkLength('aa', 2);
+const photoDescriptions = [
+  'Лучшее фото',
+  'Стильно',
+  'Модно',
+  'Кринж',
+  'Сфоткано на тапок',
+];
 
 const commentMessages = [
   'Всё отлично!',
@@ -38,91 +28,86 @@ const commentNames = [
   'Гарсон',
 ];
 
-const descriptionsForPhoto = [
-  'Лучшее фото',
-  'Стильно',
-  'Модно',
-  'Кринж',
-  'Сфоткано на тапок',
-];
+const START_COMMENT_ID = 1001;
+const END_COMMENT_ID = 1099;
+const AVATARS_QUANTITY = 6;
+const DATA_AMOUNT = 25;
+const commentatorsID = [];
 
-function generateArrayOfPhotoComments(quantity) {
-  const commentsArray = new Array(quantity).fill({});
-
-  function createPhotoComment(currentIndex) {
-    const result = {};
-    result.message = commentMessages[getRandomNumberOfRange(0, commentMessages.length - 1)];
-    result.name = commentNames[getRandomNumberOfRange(0, commentNames.length - 1)];
-    const min = 11;
-    const max = min + quantity - 1;
-    let idFor = getRandomNumberOfRange(min, max);
-
-    if (currentIndex === 0) {
-      result.id = idFor;
-    }
-    if (currentIndex > 0) {
-
-      for (let j = 0; j < currentIndex; j++) {
-        if (commentsArray[j].id === idFor) {
-          idFor = getRandomNumberOfRange(min, max);
-          j = -1;
-        }
-
-        if (j === currentIndex - 1) {
-          result.id = idFor;
-        }
-      }
-    }
-
-    return result;
+const getRandomNumberOfRange = (min, max) => {
+  if (min < 0 || min >= max) {
+    throw new Error('This function accepts values greater than zero');
   }
 
-  for (let i = 0; i < commentsArray.length; i++) {
-    commentsArray[i] = createPhotoComment(i);
+  const result = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return result;
+};
+
+const checkLength = (string, maxLength) => string.length <= maxLength;
+
+///// Генерация комментариев
+
+const createAvatar = (amount) => `img/avatar-${getRandomNumberOfRange(1, amount)}`;
+
+const createUniqeID = (arr, start = 6350, end = 6999) => {
+  let id = getRandomNumberOfRange(start, end);
+
+  while ( arr.includes(id) ) {
+    id = getRandomNumberOfRange(start,end);
   }
-  return commentsArray;
-}
 
-function generateArrayOfPhotoDescriptions(quantity) {
-  const descrArray = new Array(quantity).fill({});
-  const startID = 10001;
-  const endID = startID + quantity;
+  arr.push(id);
 
-  function generatePhotoDescriprion(currentIndex) {
-    const obj = {};
-    let objID = getRandomNumberOfRange(startID, endID);
-    let objUrl = `photos/${getRandomNumberOfRange(1, 25)}.jpg`;
-    obj.comments = generateArrayOfPhotoComments(2);
-    obj.likes = getRandomNumberOfRange(15, 200);
-    obj.description = descriptionsForPhoto[getRandomNumberOfRange(0, descriptionsForPhoto.length - 1)];
+  return id;
+};
 
-    if (currentIndex === 0) {
-      obj.id = objID;
-      obj.url = objUrl;
+const createMessage = (messages) => {
+  const messagesAmount = getRandomNumberOfRange(1, 2);
+  const firstMessage = getRandomNumberOfRange(0, messages.length - 1);
+
+  if (messagesAmount === 1) {
+    return messages[firstMessage];
+  } else {
+    let secondMessage = getRandomNumberOfRange(0, messages.length - 1);
+    while (firstMessage === secondMessage) {
+      secondMessage = getRandomNumberOfRange(0, messages.length - 1);
     }
-
-    if (currentIndex > 0) {
-      for (let j = 0; j < currentIndex; j++) {
-
-        if (descrArray[j].url === objUrl || descrArray[j].id === objID) {
-          objUrl = `photos/${getRandomNumberOfRange(1, 25)}.jpg`;
-          objID = getRandomNumberOfRange(startID, endID);
-          j = -1;
-        }
-
-        if (j === currentIndex - 1) {
-          obj.id = objID;
-          obj.url = objUrl;
-        }
-      }
-    }
-    return obj;
+    return `${messages[firstMessage]} ${messages[secondMessage]}`;
   }
+};
 
-  for (let i = 0; i < descrArray.length; i++) {
-    descrArray[i] = generatePhotoDescriprion(i);
-  }
-  return descrArray;
-}
+const createName = (names) => names[getRandomNumberOfRange(0, names.length - 1)];
 
-generateArrayOfPhotoDescriptions(25);
+const createComment = () => {
+  const comment = {
+    id: createUniqeID(commentatorsID, START_COMMENT_ID, END_COMMENT_ID),
+    avatar: createAvatar(AVATARS_QUANTITY),
+    message: createMessage(commentMessages),
+    name: createName(commentNames),
+  };
+  return comment;
+};
+
+const generateComments = () => {
+  const amountComments = getRandomNumberOfRange(1, 3);
+  return new Array(amountComments).fill('').map( () => createComment());
+};
+
+//// Генерация фотокарточек
+
+const createPhoto = (index) => {
+  const photo = {
+    id: index + 1,
+    url: `photos/${index + 1}.jpg`,
+    description: `${photoDescriptions[getRandomNumberOfRange(0, photoDescriptions.length - 1)]}`,
+    likes: getRandomNumberOfRange(15, 200),
+    comments: generateComments(),
+  };
+  return photo;
+};
+
+const generatePhotos = (amount) => new Array(amount).fill('').map((element, index) => createPhoto(index));
+
+generatePhotos(DATA_AMOUNT);
+checkLength('aa', 2);
