@@ -1,3 +1,9 @@
+const START_COMMENT_ID = 1001;
+const END_COMMENT_ID = 1099;
+const AVATARS_QUANTITY = 6;
+const DATA_AMOUNT = 25;
+const commentsID = [];
+
 const photoDescriptions = [
   'Лучшее фото',
   'Стильно',
@@ -28,20 +34,12 @@ const commentNames = [
   'Гарсон',
 ];
 
-const START_COMMENT_ID = 1001;
-const END_COMMENT_ID = 1099;
-const AVATARS_QUANTITY = 6;
-const DATA_AMOUNT = 25;
-const commentatorsID = [];
-
 const getRandomNumberOfRange = (min, max) => {
   if (min < 0 || min >= max) {
     throw new Error('This function accepts values greater than zero');
   }
 
-  const result = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  return result;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const checkLength = (string, maxLength) => string.length <= maxLength;
@@ -50,7 +48,7 @@ const checkLength = (string, maxLength) => string.length <= maxLength;
 
 const createAvatar = (amount) => `img/avatar-${getRandomNumberOfRange(1, amount)}`;
 
-const createUniqeID = (arr, start = 6350, end = 6999) => {
+const createUniqueID = (start = 6350, end = 6999, arr = []) => {
   let id = getRandomNumberOfRange(start, end);
 
   while ( arr.includes(id) ) {
@@ -79,15 +77,12 @@ const createMessage = (messages) => {
 
 const createName = (names) => names[getRandomNumberOfRange(0, names.length - 1)];
 
-const createComment = () => {
-  const comment = {
-    id: createUniqeID(commentatorsID, START_COMMENT_ID, END_COMMENT_ID),
-    avatar: createAvatar(AVATARS_QUANTITY),
-    message: createMessage(commentMessages),
-    name: createName(commentNames),
-  };
-  return comment;
-};
+const createComment = () => ({
+  id: createUniqueID(START_COMMENT_ID, END_COMMENT_ID, commentsID),
+  avatar: createAvatar(AVATARS_QUANTITY),
+  message: createMessage(commentMessages),
+  name: createName(commentNames),
+});
 
 const generateComments = () => {
   const amountComments = getRandomNumberOfRange(1, 3);
@@ -96,18 +91,16 @@ const generateComments = () => {
 
 //// Генерация фотокарточек
 
-const createPhoto = (index) => {
-  const photo = {
-    id: index + 1,
-    url: `photos/${index + 1}.jpg`,
-    description: `${photoDescriptions[getRandomNumberOfRange(0, photoDescriptions.length - 1)]}`,
-    likes: getRandomNumberOfRange(15, 200),
-    comments: generateComments(),
-  };
-  return photo;
-};
+const createPhoto = (index) => ({
+  id: index + 1,
+  url: `photos/${index + 1}.jpg`,
+  description: `${photoDescriptions[getRandomNumberOfRange(0, photoDescriptions.length - 1)]}`,
+  likes: getRandomNumberOfRange(15, 200),
+  comments: generateComments(),
+});
 
 const generatePhotos = (amount) => new Array(amount).fill('').map((element, index) => createPhoto(index));
 
 generatePhotos(DATA_AMOUNT);
+console.log(generatePhotos(DATA_AMOUNT));
 checkLength('aa', 2);
