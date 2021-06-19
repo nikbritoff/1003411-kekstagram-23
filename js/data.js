@@ -37,7 +37,7 @@ const commentNames = [
 
 /// Генерация комментариев
 
-const createAvatar = (amount) => `img/avatar-${getRandomNumberInRange(1, amount)}`;
+const createAvatar = (amount) => `img/avatar-${getRandomNumberInRange(1, amount)}.svg`;
 
 const createUniqueID = (start, end, arr = []) => {
   let id = getRandomNumberInRange(start, end);

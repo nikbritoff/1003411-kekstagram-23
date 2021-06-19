@@ -8,4 +8,10 @@ const getRandomNumberInRange = (min, max) => {
 
 const checkLength = (string, maxLength) => string.length <= maxLength;
 
-export {getRandomNumberInRange, checkLength};
+const generateElement = (tag, className) => {
+  const element = document.createElement(tag);
+  element.classList.add(className);
+  return element;
+};
+
+export {getRandomNumberInRange, checkLength, generateElement};

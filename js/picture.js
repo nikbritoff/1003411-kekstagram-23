@@ -1,12 +1,14 @@
 const templatePicture = document.querySelector('#picture').content;
 const album = document.querySelector('.pictures');
 
-const addPicture = ({url, likes, comments}) => {
+const addPicture = ({url, likes, comments, id}) => {
   const template = templatePicture.cloneNode(true);
   const picture = template.querySelector('.picture');
   const pictureImage = picture.querySelector('.picture__img');
   const pictureLikes = picture.querySelector('.picture__likes');
   const pictureComments = picture.querySelector('.picture__comments');
+
+  picture.setAttribute('data-id', id);
 
   pictureImage.src = url;
   pictureLikes.textContent = likes;
