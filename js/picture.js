@@ -8,7 +8,7 @@ const addPicture = ({url, likes, comments, id}) => {
   const pictureLikes = picture.querySelector('.picture__likes');
   const pictureComments = picture.querySelector('.picture__comments');
 
-  picture.setAttribute('data-id', id);
+  picture.dataset.id = id;
 
   pictureImage.src = url;
   pictureLikes.textContent = likes;

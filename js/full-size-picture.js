@@ -48,9 +48,6 @@ const closeFullScreen = () => {
   body.classList.remove('modal-open');
 };
 
-const findID = (evt) => +(evt.target.closest('.picture').getAttribute('data-id'));
-const findCurrentPhoto = (data, value) => data.find((el) => el.id === value);
-
 const renderFullSize = ({url, description, likes, comments}) => {
   body.classList.add('modal-open');
   fullScreen.classList.remove('hidden');
@@ -69,9 +66,10 @@ const renderFullSize = ({url, description, likes, comments}) => {
 
 const picturesClickHandler = (evt, data) => {
   evt.preventDefault();
+  const photoID = +(evt.target.closest('.picture').dataset.id);
+  const currentPhoto = data.find((el) => el.id === photoID);
 
   if (evt.target.closest('.picture')) {
-    const currentPhoto = findCurrentPhoto(data, findID(evt));
     renderFullSize(currentPhoto);
   }
 };
