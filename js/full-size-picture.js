@@ -66,7 +66,7 @@ const renderFullSize = ({url, description, likes, comments}) => {
 
 const picturesClickHandler = (evt, data) => {
   evt.preventDefault();
-  const photoID = +(evt.target.closest('.picture').dataset.id);
+  const photoID = Number(evt.target.closest('.picture').dataset.id);
   const currentPhoto = data.find((el) => el.id === photoID);
 
   if (evt.target.closest('.picture')) {
