@@ -15,26 +15,31 @@ const uploadCommentInput = uploadForm.querySelector('.text__description');
 
 const hashtagCheckValidity = () => {
   const hashtags = uploadHashtagsInput.value.trim().split(' ');
-  const result = [];
+  let result = '';
 
   const validateAmount = () => {
+    let isValid = true;
     if (hashtags.length > MAX_HASHTAGS_AMOUNT) {
-      result.push(`Максимальное количество хэштегов - ${MAX_HASHTAGS_AMOUNT}.`);
+      result += ERRORS.hashtagAmount;
+      isValid = false;
     }
+
+    return isValid;
   };
 
   const validateDuplicates = () => {
     const newSet = new Set;
+    let isUnique = true;
     hashtags.forEach((hashtag) => {
       newSet.add(hashtag.toLowerCase());
     });
 
-    if (newSet.length !== hashtags.length) {
-      result.push(ERRORS.hashtagDuplicates);
+    if (newSet.size !== hashtags.length) {
+      isUnique = false;
+      uploadHashtagsInput.setCustomValidity(ERRORS.hashtagDuplicates);
+      result += ERRORS.hashtagDuplicates;
     }
-
-    uploadHashtagsInput.setCustomValidity(result);
-    uploadHashtagsInput.reportValidity();
+    return isUnique;
   };
 
   const patternCheck = () => {
@@ -47,29 +52,40 @@ const hashtagCheckValidity = () => {
     });
 
     if (!isValid) {
-      result.push(ERRORS.hashtagPattern);
+      result += ERRORS.hashtagPattern;
     }
+
+    return isValid;
   };
 
   if (uploadHashtagsInput.value.length > 0) {
-    validateAmount();
-    patternCheck();
-    validateDuplicates();
+    if (!patternCheck() || !validateDuplicates() || !validateAmount()) {
+      uploadHashtagsInput.setCustomValidity(result);
+      uploadHashtagsInput.reportValidity();
+      return false;
+    } else {
+      uploadHashtagsInput.setCustomValidity(result);
+      uploadHashtagsInput.reportValidity();
+      return true;
+    }
+  } else {
+    return true;
   }
-
-  uploadHashtagsInput.setCustomValidity(result);
-  uploadHashtagsInput.reportValidity();
 };
 
 const commentCheckValidity = () => {
-  const result = [];
+  let result = '';
+  let isValid = true;
 
   if (uploadCommentInput.value.length > MAX_COMMENT_LENGTH) {
-    result.push(ERRORS.commentLength);
+    result = ERRORS.commentLength;
+    isValid = false;
   }
 
   uploadCommentInput.setCustomValidity(result);
   uploadCommentInput.reportValidity();
+
+  return isValid;
 };
 
 export {hashtagCheckValidity, commentCheckValidity};
