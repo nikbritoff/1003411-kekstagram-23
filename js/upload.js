@@ -14,6 +14,12 @@ const showPreviews = () => {
   const file = uploadField.files[0];
   const reader = new FileReader();
   reader.readAsDataURL(file);
+
+  if (file.type !== 'image/jpeg' &&  file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/svg') {
+    alert('Выберите изображение');
+    closeUploadModal();
+  }
+
   reader.onload = function() {
     previewImage.src = reader.result;
 
