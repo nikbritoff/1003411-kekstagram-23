@@ -7,6 +7,22 @@ const uploadCancelButton = uploadForm.querySelector('#upload-cancel');
 const uploadHashtagsInput = uploadForm.querySelector('.text__hashtags');
 const uploadCommentInput = uploadForm.querySelector('.text__description');
 
+const previewImage = document.querySelector('.img-upload__preview').querySelector('img');
+const previewEffects = document.querySelectorAll('.effects__preview');
+
+const showPreviews = () => {
+  const file = uploadField.files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function() {
+    previewImage.src = reader.result;
+
+    previewEffects.forEach((preview) => {
+      preview.style.backgroundImage = `url("${reader.result}")`;
+    });
+  };
+};
+
 const openUploadModal = () => {
   uploadEdit.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -15,6 +31,9 @@ const openUploadModal = () => {
   uploadCommentInput.addEventListener('change', () => commentCheckValidity());
 
   uploadForm.addEventListener('submit', (evt) => uploadFormHandler(evt));
+
+  showPreviews();
+
 };
 
 const closeUploadModal = () => {
