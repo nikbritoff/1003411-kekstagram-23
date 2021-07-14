@@ -35,10 +35,24 @@ const setScale = (value) => {
   imagePreview.style.transform = `scale(${value})`;
 };
 
-smallerButton.addEventListener('click', () => {
-  setScale(decreaseScale());
-});
-
-biggerButton.addEventListener('click', () => {
+const scaleBiggerClickHandler = () => {
   setScale(increaseScale());
-});
+};
+
+const scaleSmallerClickHandler = () => {
+  setScale(decreaseScale());
+};
+
+const setScaleListeners = () => {
+  scaleInput.value = '100%';
+  biggerButton.addEventListener('click', scaleBiggerClickHandler);
+  smallerButton.addEventListener('click', scaleSmallerClickHandler);
+};
+
+const removeScaleListeners = () => {
+  scaleInput.value = '100%';
+  biggerButton.removeEventListener('click', scaleBiggerClickHandler);
+  smallerButton.removeEventListener('click', scaleSmallerClickHandler);
+};
+
+export {setScaleListeners, removeScaleListeners};
