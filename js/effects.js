@@ -15,13 +15,12 @@ const sliderOptionsConfig = {
   connect: 'lower',
 };
 
-noUiSlider.create(sliderElement, sliderOptionsConfig);
+// noUiSlider.create(sliderElement, sliderOptionsConfig);
 
 const changeSliderOptions = (filter) => {
   const min = 0;
   let max = 100;
   let step = 1;
-  const start = 0;
 
   switch(filter) {
     case 'chrome':
@@ -43,9 +42,10 @@ const changeSliderOptions = (filter) => {
   sliderOptionsConfig.step = step;
   sliderOptionsConfig.range.min = min;
   sliderOptionsConfig.range.max = max;
-  sliderOptionsConfig.start = start;
 
+  sliderElement.noUiSlider.set(0);
   sliderElement.noUiSlider.updateOptions(sliderOptionsConfig);
+  console.log(sliderElement.noUiSlider);
 };
 
 const deleteFilters = () => {
@@ -85,22 +85,23 @@ const getStyle = (filter, value) => {
 };
 
 effectsList.addEventListener('change', (evt) => {
-  deleteFilters();
   const filterName = evt.target.value;
+  deleteFilters();
+  if (filterName !== 'none' && sliderElement.noUiSlider === undefined) {
+    noUiSlider.create(sliderElement, sliderOptionsConfig);
+
+    sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
+      const value = unencoded[handle];
+      uploadPreview.style.filter = getStyle(filterName, value);
+    });
+  }
+
   changeFilter(filterName);
 
   if (filterName === 'none') {
     deleteFilters();
     sliderElement.noUiSlider.destroy();
   }
-
-  sliderElement.noUiSlider.start = 0;
-
-  sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
-    const value = unencoded[handle];
-    console.log(getStyle(filterName, value))
-    uploadPreview.style.filter = getStyle(filterName, value);
-  });
 
 });
 
