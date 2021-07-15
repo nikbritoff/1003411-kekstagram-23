@@ -87,14 +87,15 @@ const getStyle = (filter, value) => {
 effectsList.addEventListener('change', (evt) => {
   const filterName = evt.target.value;
   deleteFilters();
+
   if (filterName !== 'none' && sliderElement.noUiSlider === undefined) {
     noUiSlider.create(sliderElement, sliderOptionsConfig);
-
-    sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
-      const value = unencoded[handle];
-      uploadPreview.style.filter = getStyle(filterName, value);
-    });
   }
+
+  sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
+    const value = unencoded[handle];
+    uploadPreview.style.filter = getStyle(filterName, value);
+  });
 
   changeFilter(filterName);
 
