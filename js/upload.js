@@ -1,4 +1,6 @@
 import {hashtagCheckValidity, commentCheckValidity} from './validate.js';
+import { setScaleListeners, removeScaleListeners } from './scale.js';
+import { removeSlider, setSlider } from './effects.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('#upload-file');
@@ -37,7 +39,8 @@ const openUploadModal = () => {
   uploadCommentInput.addEventListener('change', () => commentCheckValidity());
 
   uploadForm.addEventListener('submit', (evt) => uploadFormHandler(evt));
-
+  setScaleListeners();
+  setSlider();
   showPreviews();
 
 };
@@ -52,6 +55,8 @@ const closeUploadModal = () => {
     uploadField.value = '';
     uploadCancelButton.removeEventListener('click', uploadCancelHandler);
     window.removeEventListener('keydown', windowButtonEscHandler);
+    removeScaleListeners();
+    removeSlider();
   }
 };
 
