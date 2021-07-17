@@ -79,10 +79,6 @@ const inputUploadHandler = () => {
 };
 
 const uploadFormHandler = (evt) => {
-  // evt.preventDefault();
-  // hashtagCheckValidity();
-  // commentCheckValidity();
-
   if (!hashtagCheckValidity() || !commentCheckValidity()) {
     evt.preventDefault();
   }
