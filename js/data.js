@@ -1,5 +1,7 @@
 import {getRandomNumberInRange} from './utils.js';
 
+import './api.js';
+
 const START_COMMENT_ID = 1001;
 const END_COMMENT_ID = 1099;
 const AVATARS_QUANTITY = 6;
@@ -82,15 +84,22 @@ const generateComments = () => {
 };
 
 //// Генерация фотокарточек
-
-const createPhoto = (index) => ({
-  id: index + 1,
-  url: `photos/${index + 1}.jpg`,
-  description: `${photoDescriptions[getRandomNumberInRange(0, photoDescriptions.length - 1)]}`,
-  likes: getRandomNumberInRange(15, 200),
-  comments: generateComments(),
+const createPhoto = (photo) => ({
+  id: photo.id,
+  url: photo.url,
+  description: photo.description,
+  likes: photo.likes,
+  comments: photo.comments,
 });
 
-const generatePhotos = (amount) => new Array(amount).fill('').map((element, index) => createPhoto(index));
+const generatePhotos = (data) => {
+  const photos = [];
 
-export {generatePhotos};
+  data.forEach((photo) => {
+    photos.push(createPhoto(photo));
+  });
+
+  return photos;
+};
+
+export {generatePhotos, createPhoto};

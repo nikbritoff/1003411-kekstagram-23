@@ -1,6 +1,8 @@
 import {hashtagCheckValidity, commentCheckValidity} from './validate.js';
-import { setScaleListeners, removeScaleListeners } from './scale.js';
-import { removeSlider, setSlider } from './effects.js';
+import {setScaleListeners, removeScaleListeners} from './scale.js';
+import {removeSlider, setSlider} from './effects.js';
+import {sendData} from './api.js';
+import { showSuccessSendMessage, showErrorSendMessage } from './utils.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('#upload-file');
@@ -38,15 +40,13 @@ const openUploadModal = () => {
   uploadHashtagsInput.addEventListener('change', () => hashtagCheckValidity());
   uploadCommentInput.addEventListener('change', () => commentCheckValidity());
 
-  uploadForm.addEventListener('submit', (evt) => uploadFormHandler(evt));
+  uploadForm.addEventListener('submit', (evt) => uploadFormHandler);
   setScaleListeners();
   setSlider();
   showPreviews();
-
 };
 
 const closeUploadModal = () => {
-
   if (document.activeElement !== uploadHashtagsInput &&  document.activeElement !== uploadCommentInput) {
     uploadEdit.classList.add('hidden');
     document.body.classList.remove('modal-open');
@@ -79,13 +79,12 @@ const inputUploadHandler = () => {
 };
 
 const uploadFormHandler = (evt) => {
-  // evt.preventDefault();
-  // hashtagCheckValidity();
-  // commentCheckValidity();
+  evt.preventDefault();
+  sendData(showSuccessSendMessage,
+    showErrorSendMessage,
+    new FormData(evt.target));
 
-  if (!hashtagCheckValidity() || !commentCheckValidity()) {
-    evt.preventDefault();
-  }
+  closeUploadModal();
 };
 
 uploadField.addEventListener('change', () => inputUploadHandler());
