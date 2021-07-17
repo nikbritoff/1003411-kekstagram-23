@@ -26,7 +26,6 @@ const getSliderValue = (filter, units) => {
 
 const setEffect = (evt) => {
   const currentEffect = EFFECTS_DATA[evt.target.value];
-
   if (!currentEffect) {
     deleteFilters();
     sliderBlock.classList.add('hidden');
@@ -51,7 +50,9 @@ const effectsListChangeHandler = (evt) => {
 };
 
 const removeSlider = () => {
-  sliderElement.noUiSlider.destroy();
+  if (sliderElement.noUiSlider !== undefined) {
+    sliderElement.noUiSlider.destroy();
+  }
   preview.style.filter = '';
   effectLevelInput.value = '';
   preview.className = '';
@@ -59,6 +60,9 @@ const removeSlider = () => {
 };
 
 const setSlider = () => {
+  if (sliderElement.noUiSlider !== undefined) {
+    sliderElement.noUiSlider.destroy();
+  }
   noUiSlider.create(sliderElement, {
     range: {
       min: 0,

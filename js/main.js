@@ -1,6 +1,17 @@
-import {generatePhotos} from './data.js';
+// import {generatePhotos} from './data.js';
+import {showErrorMessage, showErrorSendMessage} from './utils.js';
 import {renderPictures} from './picture.js';
+import {setPicturesListener} from './full-size-picture.js';
 import './upload.js';
-import {getData} from './api.js';
+import {fetchData} from './api.js';
 
-getData(generatePhotos, renderPictures);
+const onDataLoad = (data) => {
+  renderPictures(data);
+  setPicturesListener(data);
+};
+
+const onDataFail = () => {
+  showErrorMessage('Ошибка загрузки данных. Повторите попытку позже.');
+};
+
+fetchData(onDataLoad, onDataFail);
