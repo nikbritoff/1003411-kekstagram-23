@@ -1,5 +1,6 @@
 // import {generatePhotos} from './data.js';
-import {showErrorMessage, showErrorSendMessage} from './utils.js';
+// import {showErrorMessage, showErrorSendMessage} from './utils.js';
+import {showErrorMessage} from './message.js';
 import {renderPictures} from './picture.js';
 import {setPicturesListener} from './full-size-picture.js';
 import './upload.js';
