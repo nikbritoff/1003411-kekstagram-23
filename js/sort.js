@@ -1,5 +1,6 @@
 import {renderPictures} from './picture.js';
-import {getRandomNumberInRange, debounce} from './utils.js';
+import {getRandomNumberInRange} from './utils.js';
+import { debounce } from './utils/debounce.js';
 
 const ACTIVE_FILTER_BUTTON_CLASS = 'img-filters__button--active';
 
@@ -18,12 +19,12 @@ const compareComments = (a, b) => b.comments.length - a.comments.length;
 
 const getMostDiscussPhotos = (data) => {
   const sortData = data.slice().sort(compareComments);
-  clearPhotos();
-  renderPictures(sortData);
+  // renderPictures(sortData);
+
+  return sortData;
 };
 
 const getRandomPhotos = (data) => {
-  clearPhotos();
   const randomPhotos = [];
 
   while (randomPhotos.length < 10) {
@@ -34,37 +35,41 @@ const getRandomPhotos = (data) => {
     }
   }
 
-  renderPictures(randomPhotos);
+  // renderPictures(randomPhotos);
+
+  return randomPhotos;
 };
 
-const filterClickHandler = (evt, data) => {
+const sortingClickHandler = (evt, data) => {
   if (evt.target.classList.contains('img-filters__button')) {
     filter.querySelectorAll('button').forEach((button) => {
       button.classList.remove(ACTIVE_FILTER_BUTTON_CLASS);
     });
 
     evt.target.classList.add(ACTIVE_FILTER_BUTTON_CLASS);
+    let photos = null;
 
     if (evt.target.id === 'filter-default') {
-      clearPhotos();
-      renderPictures(data);
+      photos = data;
     }
 
     if (evt.target.id === 'filter-discussed') {
-      getMostDiscussPhotos(data);
+      photos = getMostDiscussPhotos(data);
     }
 
     if (evt.target.id === 'filter-random') {
-      getRandomPhotos(data);
+      photos = getRandomPhotos(data);
     }
 
+    debounce(() => {renderPictures(photos)}, 500);      // Так работает
+    // renderPictures(photos);
   }
 };
 
-const sorting = (data) => {
+const setSortingListeners = (data) => {
   filter.addEventListener('click', (evt) => {
-    filterClickHandler(evt, data);
+    sortingClickHandler(evt, data);
   });
 };
 
-export {sorting};
+export {setSortingListeners};
