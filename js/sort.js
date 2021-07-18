@@ -3,6 +3,7 @@ import {getRandomNumberInRange} from './utils.js';
 import { debounce } from './utils/debounce.js';
 
 const ACTIVE_FILTER_BUTTON_CLASS = 'img-filters__button--active';
+const RERENDER_DELAY = 500;
 
 const filter = document.querySelector('.img-filters');
 
@@ -19,7 +20,6 @@ const compareComments = (a, b) => b.comments.length - a.comments.length;
 
 const getMostDiscussPhotos = (data) => {
   const sortData = data.slice().sort(compareComments);
-  // renderPictures(sortData);
 
   return sortData;
 };
@@ -34,8 +34,6 @@ const getRandomPhotos = (data) => {
       randomPhotos.push(randomPhoto);
     }
   }
-
-  // renderPictures(randomPhotos);
 
   return randomPhotos;
 };
@@ -62,8 +60,7 @@ const sortingClickHandler = (evt, data) => {
     }
 
     clearPhotos();
-    debounce(() => {renderPictures(photos)}, 500);      // Так работает
-    // renderPictures(photos);
+    debounce(() => renderPictures(photos), RERENDER_DELAY)();
   }
 };
 
