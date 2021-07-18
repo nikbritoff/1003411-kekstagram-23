@@ -2,7 +2,9 @@ import {hashtagCheckValidity, commentCheckValidity} from './validate.js';
 import {setScaleListeners, removeScaleListeners} from './scale.js';
 import {removeSlider, setSlider} from './effects.js';
 import {sendData} from './api.js';
-import { showSuccessSendMessage, showErrorSendMessage } from './utils.js';
+import { showSuccessSendMessage, showErrorSendMessage } from './message.js';
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadField = uploadForm.querySelector('#upload-file');
@@ -14,23 +16,26 @@ const uploadCommentInput = uploadForm.querySelector('.text__description');
 const previewImage = document.querySelector('.img-upload__preview').querySelector('img');
 const previewEffects = document.querySelectorAll('.effects__preview');
 
+let uploadFormHandler = null;
+let closeUploadModal = null;
+
 const showPreviews = () => {
   const file = uploadField.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
+  const fileName = file.name.toLowerCase();
 
-  if (file.type !== 'image/jpeg' &&  file.type !== 'image/png' && file.type !== 'image/jpg' && file.type !== 'image/svg') {
-    alert('Выберите изображение');
-    closeUploadModal();
-  }
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  reader.onload = function() {
-    previewImage.src = reader.result;
+  if (matches) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
 
-    previewEffects.forEach((preview) => {
-      preview.style.backgroundImage = `url("${reader.result}")`;
+    reader.addEventListener('load', () => {
+      previewImage.src = reader.result;
+      previewEffects.forEach((preview) => {
+        preview.style.backgroundImage = `url("${reader.result}")`;
+      });
     });
-  };
+  }
 };
 
 const openUploadModal = () => {
@@ -40,24 +45,9 @@ const openUploadModal = () => {
   uploadHashtagsInput.addEventListener('change', () => hashtagCheckValidity());
   uploadCommentInput.addEventListener('change', () => commentCheckValidity());
 
-  uploadForm.addEventListener('submit', (evt) => uploadFormHandler);
+  uploadForm.addEventListener('submit', uploadFormHandler);
   setScaleListeners();
   setSlider();
-  showPreviews();
-};
-
-const closeUploadModal = () => {
-  if (document.activeElement !== uploadHashtagsInput &&  document.activeElement !== uploadCommentInput) {
-    uploadEdit.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    uploadHashtagsInput.value = '';
-    uploadCommentInput.value = '';
-    uploadField.value = '';
-    uploadCancelButton.removeEventListener('click', uploadCancelHandler);
-    window.removeEventListener('keydown', windowButtonEscHandler);
-    removeScaleListeners();
-    removeSlider();
-  }
 };
 
 const uploadCancelHandler = () => {
@@ -71,6 +61,7 @@ const windowButtonEscHandler = (evt) => {
 };
 
 const inputUploadHandler = () => {
+  showPreviews();
   if (uploadEdit.classList.contains('hidden')) {
     openUploadModal();
     uploadCancelButton.addEventListener('click', uploadCancelHandler);
@@ -78,13 +69,27 @@ const inputUploadHandler = () => {
   }
 };
 
-const uploadFormHandler = (evt) => {
+uploadFormHandler = (evt) => {
   evt.preventDefault();
   sendData(showSuccessSendMessage,
     showErrorSendMessage,
     new FormData(evt.target));
 
   closeUploadModal();
+};
+
+closeUploadModal = () => {
+  if (document.activeElement !== uploadHashtagsInput &&  document.activeElement !== uploadCommentInput) {
+    uploadEdit.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    uploadHashtagsInput.value = '';
+    uploadCommentInput.value = '';
+    uploadField.value = '';
+    uploadCancelButton.removeEventListener('click', uploadCancelHandler);
+    window.removeEventListener('keydown', windowButtonEscHandler);
+    removeScaleListeners();
+    removeSlider();
+  }
 };
 
 uploadField.addEventListener('change', () => inputUploadHandler());
