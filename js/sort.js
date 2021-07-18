@@ -1,5 +1,5 @@
 import {renderPictures} from './picture.js';
-import {getRandomNumberInRange} from './utils.js';
+import {getRandomNumberInRange, debounce} from './utils.js';
 
 const ACTIVE_FILTER_BUTTON_CLASS = 'img-filters__button--active';
 
@@ -23,6 +23,7 @@ const getMostDiscussPhotos = (data) => {
 };
 
 const getRandomPhotos = (data) => {
+  clearPhotos();
   const randomPhotos = [];
 
   while (randomPhotos.length < 10) {
@@ -54,7 +55,6 @@ const filterClickHandler = (evt, data) => {
     }
 
     if (evt.target.id === 'filter-random') {
-      clearPhotos();
       getRandomPhotos(data);
     }
 
