@@ -1,13 +1,13 @@
 import {renderPictures} from './picture.js';
 import {getRandomNumberInRange} from './utils.js';
-import { debounce } from './utils/debounce.js';
+import {debounce} from './utils/debounce.js';
 
 const ACTIVE_FILTER_BUTTON_CLASS = 'img-filters__button--active';
-const RERENDER_DELAY = 500;
+const RANDOM_PHOTO_AMOUNT = 10;
 
 const filter = document.querySelector('.img-filters');
-
-filter.classList.remove('img-filters--inactive');
+const filtersForm = filter.querySelector('.img-filters__form');
+const filterButtons = filtersForm.querySelectorAll('button');
 
 const clearPhotos = () => {
   const allPictures = document.querySelectorAll('.picture');
@@ -16,18 +16,18 @@ const clearPhotos = () => {
   });
 };
 
-const compareComments = (a, b) => b.comments.length - a.comments.length;
-
-const getMostDiscussPhotos = (data) => {
-  const sortData = data.slice().sort(compareComments);
-
-  return sortData;
+const reserButtonActiveClass = () => {
+  filterButtons.forEach((button) => {
+    button.classList.remove(ACTIVE_FILTER_BUTTON_CLASS);
+  });
 };
+
+const getMostDiscussPhotos = (data) =>  data.slice().sort((a, b) => b.comments.length - a.comments.length);
 
 const getRandomPhotos = (data) => {
   const randomPhotos = [];
 
-  while (randomPhotos.length < 10) {
+  while (randomPhotos.length < RANDOM_PHOTO_AMOUNT) {
     const randomPhoto = data[getRandomNumberInRange(0, data.length - 1)];
 
     if (!randomPhotos.includes(randomPhoto)) {
@@ -38,36 +38,41 @@ const getRandomPhotos = (data) => {
   return randomPhotos;
 };
 
+const getCurrentPhotos = (filterType, photos) => {
+  switch (filterType) {
+    case 'filter-default':
+      return photos;
+    case 'filter-discussed':
+      return getMostDiscussPhotos(photos);
+    case 'filter-random':
+      return getRandomPhotos(photos);
+    default:
+      throw new Error(`Unknown filter: ${filterType}`);
+  }
+};
+
 const sortingClickHandler = (evt, data) => {
   if (evt.target.classList.contains('img-filters__button')) {
-    filter.querySelectorAll('button').forEach((button) => {
-      button.classList.remove(ACTIVE_FILTER_BUTTON_CLASS);
-    });
+    reserButtonActiveClass();
 
+    const currentFilter = evt.target.id;
     evt.target.classList.add(ACTIVE_FILTER_BUTTON_CLASS);
-    let photos = null;
-
-    if (evt.target.id === 'filter-default') {
-      photos = data;
-    }
-
-    if (evt.target.id === 'filter-discussed') {
-      photos = getMostDiscussPhotos(data);
-    }
-
-    if (evt.target.id === 'filter-random') {
-      photos = getRandomPhotos(data);
-    }
+    const filteredPhotos = getCurrentPhotos(currentFilter, data);
 
     clearPhotos();
-    debounce(() => renderPictures(photos), RERENDER_DELAY)();
+    renderPictures(filteredPhotos);
+    // debounce(() => renderPictures(filteredPhotos))();
   }
 };
 
 const setSortingListeners = (data) => {
-  filter.addEventListener('click', (evt) => {
+  filter.classList.remove('img-filters--inactive');
+  filtersForm.addEventListener('click', debounce((evt) => {
     sortingClickHandler(evt, data);
-  });
+  }));
+  // filtersForm.addEventListener('click', (evt) => {
+  //   sortingClickHandler(evt, data);
+  // });
 };
 
 export {setSortingListeners};
