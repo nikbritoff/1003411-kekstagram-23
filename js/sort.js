@@ -61,6 +61,7 @@ const sortingClickHandler = (evt, data) => {
       photos = getRandomPhotos(data);
     }
 
+    clearPhotos();
     debounce(() => {renderPictures(photos)}, 500);      // Так работает
     // renderPictures(photos);
   }

@@ -8,7 +8,6 @@ import { setSortingListeners} from './sort.js';
 const onDataLoad = (data) => {
   renderPictures(data);
   setPicturesListener(data);
-
   setSortingListeners(data);
 };
 
