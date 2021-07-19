@@ -44,7 +44,8 @@ const hashtagCheckValidity = () => {
 
   const patternCheck = () => {
     let isValid = true;
-
+    console.log(hashtags)
+    console.log(result)
     hashtags.forEach((hash) => {
       if (!PATTERN_HASHTAG.test(hash)) {
         isValid = false;
@@ -57,8 +58,8 @@ const hashtagCheckValidity = () => {
 
     return isValid;
   };
-
-  if (uploadHashtagsInput.value.length > 0) {
+  console.log(uploadHashtagsInput.value)
+  if (uploadHashtagsInput.value.length > 0 && uploadHashtagsInput !== '') {
     if (!patternCheck() || !validateDuplicates() || !validateAmount()) {
       uploadHashtagsInput.setCustomValidity(result);
       uploadHashtagsInput.reportValidity();

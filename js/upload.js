@@ -71,6 +71,7 @@ const inputUploadHandler = () => {
 
 uploadFormHandler = (evt) => {
   evt.preventDefault();
+  // hashtagCheckValidity();
   sendData(showSuccessSendMessage,
     showErrorSendMessage,
     new FormData(evt.target));
