@@ -28,20 +28,22 @@ const templateErrorMessage = document.querySelector('#error')
   .content
   .querySelector('.error');
 
+let windowEscHandler = null;
+
 const showMessage = (template) => {
   const removeModal = () => {
     template.remove();
     window.removeEventListener('keydown', windowEscHandler);
   };
 
-  const templateClickHandler = (evt) => {
-    if (!evt.target.classList.contains('success__inner') && !evt.target.classList.contains('error__inner')) {
+  windowEscHandler = (evt) => {
+    if (evt.key === 'Escape') {
       removeModal();
     }
   };
 
-  const windowEscHandler = (evt) => {
-    if (evt.key === 'Escape') {
+  const templateClickHandler = (evt) => {
+    if (!evt.target.classList.contains('success__inner') && !evt.target.classList.contains('error__inner')) {
       removeModal();
     }
   };

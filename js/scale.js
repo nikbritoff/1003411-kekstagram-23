@@ -46,6 +46,8 @@ const scaleSmallerClickHandler = () => {
 
 const setScaleListeners = () => {
   scaleInput.value = `${DEFAULT_SCALE_VALUE}%`;
+  imagePreview.style.transform = `scale(${DEFAULT_SCALE_VALUE}%)`;
+
   biggerButton.addEventListener('click', scaleBiggerClickHandler);
   smallerButton.addEventListener('click', scaleSmallerClickHandler);
 };

@@ -42,8 +42,8 @@ const openUploadModal = () => {
   uploadEdit.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  uploadHashtagsInput.addEventListener('change', () => hashtagCheckValidity());
-  uploadCommentInput.addEventListener('change', () => commentCheckValidity());
+  uploadHashtagsInput.addEventListener('change', hashtagCheckValidity);
+  uploadCommentInput.addEventListener('change', commentCheckValidity);
 
   uploadForm.addEventListener('submit', uploadFormHandler);
   setScaleListeners();
@@ -71,7 +71,7 @@ const inputUploadHandler = () => {
 
 uploadFormHandler = (evt) => {
   evt.preventDefault();
-  // hashtagCheckValidity();
+
   sendData(showSuccessSendMessage,
     showErrorSendMessage,
     new FormData(evt.target));

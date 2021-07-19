@@ -69,8 +69,6 @@ const clearComments = () => {
 const closeFullScreen = () => {
   fullScreen.classList.add('hidden');
   body.classList.remove('modal-open');
-
-  commentsLoaderButton.removeEventListener('click', setCommentsLoaderButtonListener);
 };
 
 const commentsLoaderButtonClickHandler = (comments) => {
@@ -87,11 +85,6 @@ const renderFullSize = ({url, description, likes, comments}) => {
   fullScreenLikes.textContent = likes;
   fullScreenCommentsCount.textContent = comments.length;
 
-  // // Удаление старых комментариев
-  // clearComments();
-  // // Отрисовка новых комментариев
-  // renderComments(comments);
-
   // Удаление старых комментариев
   clearComments();
   // Отрисовка новых комментариев
@@ -104,16 +97,12 @@ const renderFullSize = ({url, description, likes, comments}) => {
   commentsLoaderButton.addEventListener('click', setCommentsLoaderButtonListener);
 };
 
-
-
-
 const picturesClickHandler = (evt, data) => {
   if (evt.target.closest('.picture')) {
     evt.preventDefault();
     const photoID = Number(evt.target.closest('.picture').dataset.id);
     const currentPhoto = data.find((el) => el.id === photoID);
     renderFullSize(currentPhoto);
-
   }
 };
 
