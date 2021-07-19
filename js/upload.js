@@ -41,6 +41,8 @@ const showPreviews = () => {
 const openUploadModal = () => {
   uploadEdit.classList.remove('hidden');
   document.body.classList.add('modal-open');
+  uploadHashtagsInput.setCustomValidity('');
+  uploadCommentInput.setCustomValidity('');
 
   uploadHashtagsInput.addEventListener('change', hashtagCheckValidity);
   uploadCommentInput.addEventListener('change', commentCheckValidity);
@@ -93,6 +95,6 @@ closeUploadModal = () => {
   }
 };
 
-uploadField.addEventListener('change', () => inputUploadHandler());
+uploadField.addEventListener('change', inputUploadHandler);
 
 uploadForm.addEventListener('submit', uploadFormHandler);

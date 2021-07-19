@@ -17,6 +17,9 @@ const hashtagCheckValidity = () => {
   const hashtags = uploadHashtagsInput.value.trim().split(' ');
   let result = '';
 
+
+  uploadHashtagsInput.setCustomValidity('');
+
   const validateAmount = () => {
     let isValid = true;
     if (hashtags.length > MAX_HASHTAGS_AMOUNT) {
@@ -58,13 +61,13 @@ const hashtagCheckValidity = () => {
   };
 
 
-  if (uploadHashtagsInput.value.length > 0 && uploadHashtagsInput !== '') {
+  if (uploadHashtagsInput.value.length > 0) {
     if (!patternCheck() || !validateDuplicates() || !validateAmount()) {
       uploadHashtagsInput.setCustomValidity(result);
       uploadHashtagsInput.reportValidity();
       return false;
     } else {
-      uploadHashtagsInput.setCustomValidity();
+      uploadHashtagsInput.setCustomValidity('');
       uploadHashtagsInput.reportValidity();
       return true;
     }
