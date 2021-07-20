@@ -7,14 +7,4 @@ const createPhoto = (photo) => ({
   comments: photo.comments,
 });
 
-const generatePhotos = (data) => {
-  const photos = [];
-
-  data.forEach((photo) => {
-    photos.push(createPhoto(photo));
-  });
-
-  return photos;
-};
-
-export {generatePhotos, createPhoto};
+export {createPhoto};

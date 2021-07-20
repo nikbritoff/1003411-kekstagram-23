@@ -1,4 +1,4 @@
-const LOAD_COMMETS_AMOUNT = 5;
+const LOAD_COMMENTS_AMOUNT = 5;
 
 const body = document.querySelector('body');
 const pictures = document.querySelector('.pictures');
@@ -37,7 +37,7 @@ const renderComments = (comments) => {
   const addComments = () => {
     const amount = commentsList.children.length;
     const fragment = document.createDocumentFragment();
-    for (let i = amount; i < amount + LOAD_COMMETS_AMOUNT; i++) {
+    for (let i = amount; i < amount + LOAD_COMMENTS_AMOUNT; i++) {
       if (i >= comments.length) {
         break;
       }

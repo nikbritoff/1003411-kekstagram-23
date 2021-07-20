@@ -2,11 +2,11 @@ const ALERT_SHOW_TIME = 3000;
 
 const showErrorMessage = (message) => {
   const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
+  alertContainer.style.zIndex = '100';
   alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
+  alertContainer.style.left = '0';
   alertContainer.style.top = '5%';
-  alertContainer.style.right = 0;
+  alertContainer.style.right = '0';
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.border = '3px solid white';
   alertContainer.style.fontSize = '30px';
