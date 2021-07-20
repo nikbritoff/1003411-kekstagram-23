@@ -61,7 +61,6 @@ const sortingClickHandler = (evt, data) => {
 
     clearPhotos();
     renderPictures(filteredPhotos);
-    // debounce(() => renderPictures(filteredPhotos))();
   }
 };
 
@@ -70,9 +69,6 @@ const setSortingListeners = (data) => {
   filtersForm.addEventListener('click', debounce((evt) => {
     sortingClickHandler(evt, data);
   }));
-  // filtersForm.addEventListener('click', (evt) => {
-  //   sortingClickHandler(evt, data);
-  // });
 };
 
 export {setSortingListeners};

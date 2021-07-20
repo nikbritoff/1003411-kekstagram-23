@@ -13,17 +13,7 @@ const commentsLoaderButton = fullScreen.querySelector('.social__comments-loader'
 const fullScreenDescription = fullScreen.querySelector('.social__caption');
 const closeFullScreenButton = fullScreen.querySelector('.big-picture__cancel');
 
-// Временное скрытие счетчика комментов и кнопку загрузки остальных комментариев
-// const commentCounts = fullScreen.querySelector('.social__comment-count');
-// const commentLoader = fullScreen.querySelector('.comments-loader');
-const tempClosingElements = () => {
-  // commentLoader.classList.add('hidden');
-  // commentCounts.classList.add('hidden');
-};
-
 const buildComment = ({avatar, name, message}) => {
-  tempClosingElements();
-
   const commentTemplate = comment.cloneNode(true);
   const commentTemplateAvatar = commentTemplate.querySelector('.social__picture');
   const commentTemplateMessage = commentTemplate.querySelector('.social__text');

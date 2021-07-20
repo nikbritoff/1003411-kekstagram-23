@@ -77,6 +77,7 @@ const hashtagCheckValidity = () => {
 };
 
 const commentCheckValidity = () => {
+  uploadCommentInput.setCustomValidity('');
   let result = '';
   let isValid = true;
 
